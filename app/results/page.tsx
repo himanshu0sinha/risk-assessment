@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {micromark} from 'micromark'
 
 async function getResults(id: string) {
   try {
@@ -15,6 +16,10 @@ async function getResults(id: string) {
     console.error('Error fetching results:', error)
     return null
   }
+}
+
+function convertMarkdownToHtml(markdown: string) {
+  return micromark(markdown)
 }
 
 export default async function ResultsPage({ searchParams }: { searchParams: { id: string } }) {
@@ -39,9 +44,9 @@ export default async function ResultsPage({ searchParams }: { searchParams: { id
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
       <div
-        className="w-full max-w-3xl"
+        className="w-full max-w-4xl"
       >
-        <Card className="bg-white bg-opacity-90 backdrop-blur-md shadow-xl">
+        <Card className="bg-white bg-opacity-90 backdrop-blur-md shadow-xl p-8">
           <CardHeader>
             <CardTitle className="text-3xl text-center">Your Financial Insights</CardTitle>
           </CardHeader>
@@ -53,21 +58,21 @@ export default async function ResultsPage({ searchParams }: { searchParams: { id
               </section>
               <section>
                 <h2 className="text-2xl font-semibold mb-2">Savings Habits</h2>
-                <p className="text-lg">{results.savingsHabits}</p>
+                <p className="text-lg" dangerouslySetInnerHTML={{ __html: convertMarkdownToHtml(results.savingsHabits)}}></p>
               </section>
               <section>
                 <h2 className="text-2xl font-semibold mb-2">Investment Strategy</h2>
-                <p className="text-lg">{results.investmentStrategy}</p>
+                <p className="text-lg" dangerouslySetInnerHTML={{ __html: convertMarkdownToHtml(results.investmentStrategy)}}></p>
               </section>
               <section>
                 <h2 className="text-2xl font-semibold mb-2">Debt Management</h2>
-                <p className="text-lg">{results.debtManagement}</p>
+                <p className="text-lg" dangerouslySetInnerHTML={{ __html: convertMarkdownToHtml(results.debtManagement)}}></p>
               </section>
               <section>
                 <h2 className="text-2xl font-semibold mb-2">Recommendations</h2>
-                <ul className="list-disc list-inside text-lg">
+                <ul className="list-disc text-lg">
                   {results.recommendations.map((recommendation: string, index: number) => (
-                    <li key={index}>{recommendation}</li>
+                    <li key={index} dangerouslySetInnerHTML={{ __html: convertMarkdownToHtml(recommendation)}}></li>
                   ))}
                 </ul>
               </section>
