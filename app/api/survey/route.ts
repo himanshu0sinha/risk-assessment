@@ -32,7 +32,7 @@ export async function POST(request: Request) {
 }
 
 async function processAnswersWithGemini(answers: any) {
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" })
+  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" })
 
   const prompt = `
     Analyze the following financial survey responses and provide personalized insights:
